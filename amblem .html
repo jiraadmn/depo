@@ -1,31 +1,41 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Calculator</title>
+    <title>Basit Hesap Makinesi</title>
     <style>
-      body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #ff0000; /* Arka plan rengini kırmızı yapar */
-    margin: 0;
-    overflow: hidden;
-    position: relative;
-}
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(-45deg, #ff0000, #00ff00, #0000ff, #ffff00);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite; /* Arka planın rengarenk animasyonu */
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
 
-        .calculator {
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .hesapmakinesi {
             background: white;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 230px;
         }
-        #display {
+
+        #görüntüleme {
             width: 100%;
             padding: 10px;
             font-size: 18px;
@@ -34,11 +44,13 @@
             border-radius: 4px;
             text-align: right;
         }
-        .button-container {
+
+        .düğme-konteyner {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 5px;
         }
+
         button {
             padding: 15px;
             font-size: 18px;
@@ -48,32 +60,39 @@
             background-color: #f0f0f0;
             transition: background-color 0.3s;
         }
+
         button:active {
             background-color: #ddd;
         }
-        .operator {
+
+        .operatör {
             background-color: #ff9f43;
             color: white;
         }
-        .equal {
+
+        .eşit {
             background-color: #00b894;
             color: white;
             grid-column: span 2;
         }
-        .clear {
+
+        .temizle {
             background-color: #d63031;
             color: white;
             grid-column: span 2;
         }
-        .zero {
+
+        .sıfır {
             grid-column: span 2;
         }
-        .falling-number {
+
+        .düşensayı {
             position: absolute;
-            font-size: 48px; /* Daha büyük görünmesi için */
-            animation: fall 3s forwards; /* Yavaş düşmesi için süre artırıldı */
+            font-size: 48px;
+            animation: fall 3s forwards;
             opacity: 0.8;
         }
+
         @keyframes fall {
             0% {
                 transform: translateY(-100px);
@@ -84,82 +103,82 @@
                 opacity: 0;
             }
         }
-        /* GitHub amblemi */
+
         .github-logo {
             position: absolute;
             top: 10px;
             left: 10px;
-            width: 40px; /* Amblemin boyutu */
+            width: 40px;
             cursor: pointer;
             transition: transform 0.3s;
         }
+
         .github-logo:hover {
-            transform: scale(1.1); /* Hover efektinde büyüme */
+            transform: scale(1.1);
         }
     </style>
 </head>
 <body>
 
-<!-- GitHub amblemi ekleniyor -->
 <a href="https://github.com" target="_blank">
-    <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub Logo" class="github-logo">
+    <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub Logosu" class="github-logo">
 </a>
 
-<div class="calculator">
-    <input type="text" id="display" placeholder="0" disabled>
-    <div class="button-container">
-        <button class="clear" onclick="clearDisplay()">C</button>
+<div class="hesapmakinesi">
+    <input type="text" id="görüntüleme" placeholder="0" disabled>
+    <div class="düğme-konteyner">
+        <button class="temizle" onclick="clearDisplay()">C</button>
         <button onclick="deleteLast()">DEL</button>
-        <button class="operator" onclick="appendToDisplay('/')">/</button>
-        <button class="operator" onclick="appendToDisplay('*')">*</button>
+        <button class="operatör" onclick="appendToDisplay('/')">/</button>
+        <button class="operatör" onclick="appendToDisplay('*')">*</button>
 
         <button onclick="appendToDisplay('7')">7</button>
         <button onclick="appendToDisplay('8')">8</button>
         <button onclick="appendToDisplay('9')">9</button>
-        <button class="operator" onclick="appendToDisplay('-')">-</button>
+        <button class="operatör" onclick="appendToDisplay('-')">-</button>
 
         <button onclick="appendToDisplay('4')">4</button>
         <button onclick="appendToDisplay('5')">5</button>
         <button onclick="appendToDisplay('6')">6</button>
-        <button class="operator" onclick="appendToDisplay('+')">+</button>
+        <button class="operatör" onclick="appendToDisplay('+')">+</button>
 
         <button onclick="appendToDisplay('1')">1</button>
         <button onclick="appendToDisplay('2')">2</button>
         <button onclick="appendToDisplay('3')">3</button>
-        <button class="equal" onclick="calculate()">=</button>
+        <button class="eşit" onclick="calculate()">=</button>
 
-        <button class="zero" onclick="appendToDisplay('0')">0</button>
+        <button class="sıfır" onclick="appendToDisplay('0')">0</button>
         <button onclick="appendToDisplay('.')">.</button>
     </div>
 </div>
 
 <script>
     function appendToDisplay(value) {
-        document.getElementById('display').value += value;
+        document.getElementById('görüntüleme').value += value;
         createFallingNumber(value);
     }
 
     function clearDisplay() {
-        document.getElementById('display').value = '';
+        document.getElementById('görüntüleme').value = '';
     }
 
     function deleteLast() {
-        let display = document.getElementById('display');
+        let display = document.getElementById('görüntüleme');
         display.value = display.value.slice(0, -1);
     }
 
     function calculate() {
         try {
-            let result = eval(document.getElementById('display').value);
-            document.getElementById('display').value = result;
+            let result = eval(document.getElementById('görüntüleme').value);
+            document.getElementById('görüntüleme').value = result;
         } catch {
-            document.getElementById('display').value = 'Error';
+            document.getElementById('görüntüleme').value = 'Hata';
         }
     }
 
     function createFallingNumber(value) {
         const numberElement = document.createElement('div');
-        numberElement.className = 'falling-number';
+        numberElement.className = 'düşensayı';
         numberElement.textContent = value;
         numberElement.style.left = Math.random() * window.innerWidth + 'px';
         document.body.appendChild(numberElement);
