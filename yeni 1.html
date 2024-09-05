@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T-Rex Runner</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #f7f7f7;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            display: block;
+            background: #fff;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Canvas boyutları
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Dinozor ayarları
+        const dino = {
+            x: 50,
+            y: canvas.height - 70,
+            width: 40,
+            height: 40,
+            color: 'green',
+            velocityY: 0,
+            jumpPower: -15,
+            gravity: 0.8,
+            isJumping: false
+        };
+
+        // Engel ayarları
+        const obstacles = [];
+        const obstacleSpeed = 5;
+        const obstacleInterval = 2000; // Engel aralığı (ms)
+        let lastObstacleTime = 0;
+
+        // Puan
+        let score = 0;
+
+        function drawDino() {
+            ctx.fillStyle = dino.color;
+            ctx.fillRect(dino.x, dino.y, dino.width, dino.height);
+        }
+
+        function drawObstacles() {
+            ctx.fillStyle = 'red';
+            obstacles.forEach(obs => {
+                ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+            });
+        }
+
+        function drawScore() {
+            ctx.fillStyle = 'black';
+            ctx.font = '24px Arial';
+            ctx.fillText(`Score: ${score}`, 20, 30);
+        }
+
+        function updateDino() {
+            if (dino.isJumping) {
+                dino.velocityY = dino.jumpPower;
+                dino.isJumping = false;
+            }
+            dino.velocityY += dino.gravity;
+            dino.y += dino.velocityY;
+
+            // Ekranın alt sınırını kontrol et
+            if (dino.y > canvas.height - dino.height) {
+                dino.y = canvas.height - dino.height;
+                dino.velocityY = 0;
+            }
+            
+            // Ekranın üst sınırını kontrol et
+            if (dino.y < 0) {
+                dino.y = 0;
+                dino.velocityY = 0;
+            }
+        }
+
+        function updateObstacles() {
+            obstacles.forEach(obs => {
+                obs.x -= obstacleSpeed;
+            });
+
+            if (obstacles.length && obstacles[0].x + obstacles[0].width < 0) {
+                obstacles.shift();
+                score++;
+            }
+        }
+
+        function detectCollision() {
+            obstacles.forEach(obs => {
+                if (dino.x < obs.x + obs.width &&
+                    dino.x + dino.width > obs.x &&
+                    dino.y < obs.y + obs.height &&
+                    dino.y + dino.height > obs.y) {
+                    alert('Game Over!');
+                    obstacles.length = 0;
+                    score = 0;
+                }
+            });
+        }
+
+        function createObstacle() {
+            const height = Math.random() * (canvas.height - 100) + 30;
+            obstacles.push({
+                x: canvas.width,
+                y: canvas.height - height,
+                width: 20,
+                height: height
+            });
+        }
+
+        function gameLoop(timestamp) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (timestamp - lastObstacleTime > obstacleInterval) {
+                createObstacle();
+                lastObstacleTime = timestamp;
+            }
+
+            updateDino();
+            updateObstacles();
+            detectCollision();
+
+            drawDino();
+            drawObstacles();
+            drawScore();
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                dino.isJumping = true;
+            }
+        });
+
+        requestAnimationFrame(gameLoop);
+    </script>
+</body>
+</html>
+
