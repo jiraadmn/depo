@@ -159,12 +159,15 @@
     }
 
     function clearDisplay() {
-        document.getElementById('görüntüleme').value = '';
+        document.getElementById('görüntüleme').value = '0';
     }
 
     function deleteLast() {
         let display = document.getElementById('görüntüleme');
         display.value = display.value.slice(0, -1);
+        if (display.value === '') {
+            display.value = '0';
+        }
     }
 
     function calculate() {
@@ -186,6 +189,48 @@
         numberElement.addEventListener('animationend', () => {
             numberElement.remove();
         });
+    }
+
+    function toggleSign() {
+        let display = document.getElementById('görüntüleme');
+        if (display.value !== "0") {
+            display.value = parseFloat(display.value) * -1;
+        }
+    }
+
+    function calculatePercentage() {
+        let display = document.getElementById('görüntüleme');
+        display.value = parseFloat(display.value) / 100;
+    }
+
+    function calculateSquare() {
+        let display = document.getElementById('görüntüleme');
+        display.value = Math.pow(parseFloat(display.value), 2);
+    }
+
+    function calculateSquareRoot() {
+        let display = document.getElementById('görüntüleme');
+        display.value = Math.sqrt(parseFloat(display.value));
+    }
+
+    function clearMemory() {
+        memory = 0;
+    }
+
+    function recallMemory() {
+        document.getElementById('görüntüleme').value = memory;
+    }
+
+    function addToMemory() {
+        memory += parseFloat(document.getElementById('görüntüleme').value) || 0;
+    }
+
+    function subtractFromMemory() {
+        memory -= parseFloat(document.getElementById('görüntüleme').value) || 0;
+    }
+
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
     }
 </script>
 
