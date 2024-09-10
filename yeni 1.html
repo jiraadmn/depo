@@ -116,9 +116,10 @@
 
         function createObstacle() {
             const height = Math.random() * (canvas.height - 100) + 30;
+            const y = Math.random() > 0.5 ? canvas.height - height : 0; // Üstten veya alttan gelme
             obstacles.push({
                 x: canvas.width,
-                y: canvas.height - height,
+                y: y,
                 width: 20,
                 height: height
             });
@@ -153,4 +154,3 @@
     </script>
 </body>
 </html>
-
