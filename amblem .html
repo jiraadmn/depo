@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Basit Hesap Makinesi</title>
+    <title>Gelişmiş Hesap Makinesi</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -15,10 +15,11 @@
             height: 100vh;
             background: linear-gradient(-45deg, #ff0000, #00ff00, #0000ff, #ffff00);
             background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite; /* Arka planın rengarenk animasyonu */
+            animation: gradientBG 15s ease infinite;
             margin: 0;
             overflow: hidden;
             position: relative;
+            transition: background-color 0.3s;
         }
 
         @keyframes gradientBG {
@@ -32,7 +33,7 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 230px;
+            width: 260px;
         }
 
         #görüntüleme {
@@ -116,6 +117,16 @@
         .github-logo:hover {
             transform: scale(1.1);
         }
+
+        .dark-mode {
+            background: #333 !important;
+            color: white;
+        }
+
+        .dark-mode button {
+            background-color: #555 !important;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -149,12 +160,29 @@
 
         <button class="sıfır" onclick="appendToDisplay('0')">0</button>
         <button onclick="appendToDisplay('.')">.</button>
+        <button onclick="toggleSign()">±</button>
+        <button onclick="calculatePercentage()">%</button>
+        <button onclick="calculateSquare()">x²</button>
+        <button onclick="calculateSquareRoot()">√x</button>
+
+        <button onclick="clearMemory()">MC</button>
+        <button onclick="recallMemory()">MR</button>
+        <button onclick="addToMemory()">M+</button>
+        <button onclick="subtractFromMemory()">M-</button>
+        <button onclick="toggleDarkMode()">Gece Modu</button>
     </div>
 </div>
 
 <script>
+    let memory = 0;
+
     function appendToDisplay(value) {
-        document.getElementById('görüntüleme').value += value;
+        let display = document.getElementById('görüntüleme');
+        if (display.value === "0") {
+            display.value = value;
+        } else {
+            display.value += value;
+        }
         createFallingNumber(value);
     }
 
